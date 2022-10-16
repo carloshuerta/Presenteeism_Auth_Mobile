@@ -6,6 +6,8 @@ import Home from "./src/pages/Home"
 import configureStore from "./src/stores/configureStore"
 import { View, Text } from 'react-native'
 import { Provider } from 'react-redux';
+import * as Font from 'expo-font';
+import Register from './src/pages/Register'
  
 const Stack = createStackNavigator()
 
@@ -16,9 +18,30 @@ const AppWrap = () => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{ title: "Demo" }}
+          options={{
+            headerShown : false
+          }}
         />
-        <Stack.Screen name="Detection" component={Liveness} />
+        <Stack.Screen
+          name="Register"
+          component={Register}
+          options={{
+            title: "",
+            headerStyle: {
+              backgroundColor: "#E1E1E1"
+            }
+          }}
+        />
+        <Stack.Screen 
+          name="Detection" 
+          component={Liveness} 
+          options={{
+            title: "",
+            headerStyle: {
+              backgroundColor: "#E1E1E1"
+            }
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   )
@@ -28,15 +51,15 @@ const App = () => {
   const store = configureStore()
 
   useEffect(() => {
-    // const getFonts = async () => {
-    //   await Font.loadAsync({
-    //     'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
-    //     'AsapCondensed-Bold':  require('./assets/fonts/AsapCondensed-Bold.ttf')
-    //   });
-    //   setFontsLoaded(true);
-    // }
+    const getFonts = async () => {
+      await Font.loadAsync({
+        'Montserrat-Medium': require('./assets/fonts/Montserrat-Medium.ttf'),
+        'Montserrat-Regular': require('./assets/fonts/Montserrat-Regular.ttf')
+      });
+      setFontsLoaded(true);
+    }
 
-    //getFonts();
+    getFonts();
     setFontsLoaded(true);
   }, []);
   
@@ -44,7 +67,7 @@ const App = () => {
   
   if(!fontsLoaded){
     return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }} >
         <Text>Cargando...</Text>
       </View>
     )

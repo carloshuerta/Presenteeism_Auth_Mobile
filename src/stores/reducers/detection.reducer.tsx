@@ -22,8 +22,7 @@ const detectionReducer = (
   ): typeof initialState => {
     const numDetections = state.detectionsList.length
     // +1 for face detection
-    const newProgressFill =
-      (100 / (numDetections + 1)) * (state.currentDetectionIndex + 1)
+    const newProgressFill = (100 / (numDetections + 1)) * (state.currentDetectionIndex + 1)
   
     switch (action.type) {
       case "FACE_DETECTED":

@@ -88,7 +88,7 @@ const Liveness = ({detectionState, dispatchDetection}) => {
         return
       case "TURN_HEAD_RIGHT":
         if (face.yawAngle >= detections.TURN_HEAD_RIGHT.minAngle 
-          && face.yawAngle < detections.TURN_HEAD_RIGHT.maxAngle ) {
+          && face.yawAngle <= detections.TURN_HEAD_RIGHT.maxAngle ) {
             dispatchDetection({ type: "NEXT_DETECTION", value: null })
         }
         return
@@ -106,6 +106,8 @@ const Liveness = ({detectionState, dispatchDetection}) => {
   }
 
   return (
+    <>
+    <Text style={{textAlign:"center", fontSize: 18, backgroundColor: "#E1E1E1"}}>Ubica tu cara en el centro</Text>
     <View style={styles.container}>
       <View
         style={{
@@ -113,7 +115,7 @@ const Liveness = ({detectionState, dispatchDetection}) => {
           top: 0,
           width: "100%",
           height: PREVIEW_MARGIN_TOP,
-          backgroundColor: "white",
+          backgroundColor: "#E1E1E1",
           zIndex: 10
         }}
       />
@@ -124,7 +126,7 @@ const Liveness = ({detectionState, dispatchDetection}) => {
           left: 0,
           width: (windowWidth - PREVIEW_SIZE) / 2,
           height: PREVIEW_SIZE,
-          backgroundColor: "white",
+          backgroundColor: "#E1E1E1",
           zIndex: 10
         }}
       />
@@ -135,11 +137,10 @@ const Liveness = ({detectionState, dispatchDetection}) => {
           right: 0,
           width: (windowWidth - PREVIEW_SIZE) / 2 + 1,
           height: PREVIEW_SIZE,
-          backgroundColor: "white",
+          backgroundColor: "#E1E1E1",
           zIndex: 10
         }}
       />
-
       <Camera
         style={styles.cameraPreview}
         type={CameraType.front}
@@ -177,10 +178,11 @@ const Liveness = ({detectionState, dispatchDetection}) => {
         </Text>
       </View>
     </View>
+    </>
   )
 }
 
-const PREVIEW_MARGIN_TOP = 50
+const PREVIEW_MARGIN_TOP = 20
 const PREVIEW_SIZE = 300
 
 const styles = StyleSheet.create({
@@ -190,7 +192,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#fff"
+    backgroundColor: "#E1E1E1"
   },
   promptContainer: {
     position: "absolute",
@@ -198,7 +200,7 @@ const styles = StyleSheet.create({
     top: PREVIEW_MARGIN_TOP + PREVIEW_SIZE,
     height: "100%",
     width: "100%",
-    backgroundColor: "white"
+    backgroundColor: "#E1E1E1"
   },
   faceStatus: {
     fontSize: 24,

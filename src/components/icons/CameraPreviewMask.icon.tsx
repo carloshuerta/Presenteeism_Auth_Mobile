@@ -7,7 +7,7 @@ const CameraPreviewMask = (props: SvgProps) => (
       fillRule="evenodd"
       clipRule="evenodd"
       d="M150 0H0v300h300V0H150zm0 0c82.843 0 150 67.157 150 150s-67.157 150-150 150S0 232.843 0 150 67.157 0 150 0z"
-      fill="#fff"
+      fill="#E1E1E1"
     />
   </Svg>
 )
