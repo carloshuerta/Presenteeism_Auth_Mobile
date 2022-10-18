@@ -8,6 +8,7 @@ import { View, Text } from 'react-native'
 import { Provider } from 'react-redux';
 import * as Font from 'expo-font';
 import Register from './src/pages/Register'
+import ValidateProfile from './src/pages/ValidateProfile'
  
 const Stack = createStackNavigator()
 
@@ -28,7 +29,26 @@ const AppWrap = () => {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: "#E1E1E1"
+              backgroundColor: "#E1E1E1",
+              shadowColor: "transparent"
+            },
+            cardStyle: {
+              backgroundColor: "#E1E1E1",             
+            }
+          }}
+        />
+        <Stack.Screen
+          name="ValidateProfile"
+          component={ValidateProfile}
+          options={{
+            title: "",
+            headerStyle: {
+              backgroundColor: "#5570F1",
+              shadowColor: "transparent"
+            },
+            headerTintColor: "#FFF",
+            cardStyle: {
+              backgroundColor: "#5570F1" 
             }
           }}
         />
@@ -38,7 +58,11 @@ const AppWrap = () => {
           options={{
             title: "",
             headerStyle: {
-              backgroundColor: "#E1E1E1"
+              backgroundColor: "#E1E1E1",
+              shadowColor: "transparent"
+            },
+            cardStyle: {
+              backgroundColor: "#E1E1E1",             
             }
           }}
         />

@@ -14,7 +14,7 @@ const CELL_COUNT = 5;
 
 const Register = () => {
   const navigation = useNavigation()
-  const startDetection = () => navigation.navigate("Detection")
+  const validateProfile = () => navigation.navigate("ValidateProfile")
 
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});
@@ -47,7 +47,7 @@ const Register = () => {
                 cellCount={CELL_COUNT}
                 rootStyle={styles.codeFieldRoot}
                 keyboardType="number-pad"
-                textContentType="oneTimeCode"
+                textContentType="oneTimeCode"              
                 renderCell={({index, symbol, isFocused}) => (
                     <Text
                         key={index}
@@ -59,7 +59,7 @@ const Register = () => {
                 /> 
         </View>
         <View style={[styles.view, { flex: 2 }]}>
-          <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={startDetection}>
+          <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={validateProfile}>
             <Text style={{color: "white", textAlign: "center", fontSize: 20}}>Siguiente</Text>
           </Pressable>
           <Pressable>
