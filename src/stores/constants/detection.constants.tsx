@@ -9,7 +9,7 @@ export type DetectionActions = keyof typeof detections
 
 export const promptsText = {
     noFaceDetected: "Cara no detectada",
-    performActions: "Realiza las siguientes acciones:"
+    performActions: "Sigue las siguientes instrucciones"
 }
 
 export interface Action<T extends keyof Actions> {
