@@ -1,11 +1,11 @@
 import { View, StyleSheet, Text, Pressable, TextInput } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import ProfileIcon from "../components/icons/Profile.icon"
+import ProfileIcon from "../../components/icons/Profile.icon"
 
 const ValidateProfile = () => {
 
   const navigation = useNavigation()
-  const takePicture = () => navigation.navigate("Detection")
+  const takePicture = () => navigation.navigate("FaceRegister")
 
   return (
       <View style={[{

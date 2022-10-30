@@ -1,18 +1,18 @@
 import * as FaceDetector from "expo-face-detector"
-import React, { useEffect, useReducer, useRef, useState } from "react"
-import { StyleSheet, Text, View, Dimensions, PixelRatio } from "react-native"
+import React, { useEffect, useState } from "react"
+import { StyleSheet, Text, View, Dimensions } from "react-native"
 import { Camera, CameraType, FaceDetectionResult } from "expo-camera"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { useNavigation } from "@react-navigation/native"
-import FaceDetection from "../interfaces/FaceDetection.inteface"
-import CameraPreviewMask from "../components/icons/CameraPreviewMask.icon"
-import { Action, Actions, detections, promptsText } from "../stores/constants/detection.constants"
-import { updateDetection } from "../stores/actions/detection.actions"
+import FaceDetection from "../../interfaces/FaceDetection.inteface"
+import CameraPreviewMask from "../../components/icons/CameraPreviewMask.icon"
+import { Action, Actions, detections, promptsText } from "../../stores/constants/detection.constants"
+import { updateDetection } from "../../stores/actions/detection.actions"
 import { connect } from 'react-redux';
 
 const { width: windowWidth } = Dimensions.get("window")
 
-const Liveness = ({detectionState, dispatchDetection}) => {
+const Detection = ({detectionState, dispatchDetection}) => {
   const navigation = useNavigation()
   const [hasPermission, setHasPermission] = useState(false)
 
@@ -235,4 +235,4 @@ const mapDispatchToProps = dispatch => {
   }
 };
 
-export default connect(mapStateToProps,mapDispatchToProps)(Liveness);
+export default connect(mapStateToProps,mapDispatchToProps)(Detection);
