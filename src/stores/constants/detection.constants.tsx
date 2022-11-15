@@ -1,3 +1,5 @@
+import { CameraCapturedPicture } from "expo-camera"
+
 export const detections = {
   BLINK: { promptText: "Pestañá", minProbability: 0.4 },
   TURN_HEAD_LEFT: { promptText: "Gira la cabeza a la izquierda", minAngle: 315 , maxAngle: 345 },
@@ -19,5 +21,5 @@ export interface Action<T extends keyof Actions> {
 
 export interface Actions {
     FACE_DETECTED: "yes" | "no"
-    NEXT_DETECTION: null
+    NEXT_DETECTION: CameraCapturedPicture
 }

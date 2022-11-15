@@ -1,14 +1,15 @@
 import { useEffect, useState } from 'react'
 import { NavigationContainer } from "@react-navigation/native"
 import { createStackNavigator } from "@react-navigation/stack"
-import Liveness from "./src/pages/Liveness.android"
-import Home from "./src/pages/Home"
+import Detection from "./src/pages/Check/Detection.android"
+import Home from "./src/pages/Check/Home"
 import configureStore from "./src/stores/configureStore"
 import { View, Text } from 'react-native'
 import { Provider } from 'react-redux';
 import * as Font from 'expo-font';
-import Register from './src/pages/Register'
-import ValidateProfile from './src/pages/ValidateProfile'
+import Register from './src/pages/Register/Register'
+import ValidateProfile from './src/pages/Check/ValidateProfile'
+import FaceRegister from './src/pages/Register/FaceRegister'
  
 const Stack = createStackNavigator()
 
@@ -52,9 +53,23 @@ const AppWrap = () => {
             }
           }}
         />
+        <Stack.Screen
+          name="FaceRegister"
+          component={FaceRegister}
+          options={{
+            title: "",
+            headerStyle: {
+              backgroundColor: "#E1E1E1",
+              shadowColor: "transparent"
+            },
+            cardStyle: {
+              backgroundColor: "#E1E1E1" 
+            }
+          }}
+        />
         <Stack.Screen 
           name="Detection" 
-          component={Liveness} 
+          component={Detection} 
           options={{
             title: "",
             headerStyle: {

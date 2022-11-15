@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, Pressable } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import CheckIcon from "../components/icons/Check.icon";
-import CompanyLogo from "../components/icons/CompanyLogo.icon";
-import DetectedUserIcon from "../components/icons/DetectedUser.icon";
-import LocationIcon from "../components/icons/Location.icon";
+import CheckIcon from "../../components/icons/Check.icon";
+import CompanyLogo from "../../components/icons/CompanyLogo.icon";
+import DetectedUserIcon from "../../components/icons/DetectedUser.icon";
+import LocationIcon from "../../components/icons/Location.icon";
 
 const Home = () => {
 

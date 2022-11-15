@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet, Pressable } from "react-native"
 import { useNavigation } from "@react-navigation/native"
-import CompanyLogo from "../components/icons/CompanyLogo.icon";
+import CompanyLogo from "../../components/icons/CompanyLogo.icon";
 import { useState } from "react";
 
 import {
