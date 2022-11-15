@@ -1,7 +1,6 @@
-import { View, Text, StyleSheet, Pressable } from "react-native"
+import { View, Text, StyleSheet, Pressable, Alert } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import CompanyLogo from "../../components/icons/CompanyLogo.icon";
-import { useState } from "react";
 
 import {
     CodeField,
@@ -9,12 +8,20 @@ import {
     useBlurOnFulfill,
     useClearByFocusCell,
   } from 'react-native-confirmation-code-field';
+import { get } from "../../utils/http";
+import { useState } from "react";
 
 const CELL_COUNT = 5;
 
 const Register = () => {
-  const navigation = useNavigation()
-  const validateProfile = () => navigation.navigate("ValidateProfile")
+  const navigation = useNavigation();
+
+  const validateProfile = () => {
+    get(`/employee/employee-validation?validationCode=${value}`).then(response => {
+      console.log(response.data)
+        navigation.navigate("ValidateProfile", response.data)
+      }).catch(error => Alert.alert("Error!", "Código de validacion no válido, contacte con Recursos Humanos."))
+  }
 
   const [value, setValue] = useState('');
   const ref = useBlurOnFulfill({value, cellCount: CELL_COUNT});

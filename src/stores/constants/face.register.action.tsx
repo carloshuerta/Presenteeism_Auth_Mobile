@@ -12,5 +12,6 @@ export interface RegisterFaceAction<T extends keyof RegisterFaceActions> {
 
 export interface RegisterFaceActions {
     FACE_DETECTED: "yes" | "no",
-    NEXT_PHOTO: null
+    NEXT_PHOTO: null,
+    RELOAD : null
 }

@@ -28,8 +28,11 @@ const Detection = ({detectionState, dispatchDetection}) => {
   useEffect(() => {
     if (detectionState.processComplete) {
       setTimeout(() => {
-        // Delay para ver la animacion de terminado
-        navigation.goBack()
+        // Sacar foto y validar 
+
+        dispatchDetection({ type: "FACE_DETECTED", value: "no" })
+
+        navigation.navigate("Zone")
       }, 750)
     }
   }, [detectionState.processComplete])
