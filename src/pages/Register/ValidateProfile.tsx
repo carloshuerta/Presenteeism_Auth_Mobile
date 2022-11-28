@@ -2,10 +2,13 @@ import { View, StyleSheet, Text, Pressable, TextInput } from "react-native"
 import { useNavigation } from "@react-navigation/native"
 import ProfileIcon from "../../components/icons/Profile.icon"
 
-const ValidateProfile = () => {
+const ValidateProfile = ({route}) => {
 
   const navigation = useNavigation()
-  const takePicture = () => navigation.navigate("FaceRegister")
+
+  const {id, email, lastName, name} = route.params;
+
+  const takePicture = () => navigation.navigate("FaceRegister", id)
 
   return (
       <View style={[{
@@ -28,15 +31,17 @@ const ValidateProfile = () => {
                     <View style={[styles.inputContainer, {width: "50%", height: "50%"}]}>
                         <TextInput 
                             style={[styles.input]}
-                            placeholder={"Nombre completo"}
+                            placeholder={"Nombre"}
                             keyboardType={"default"}
+                            value={name}
                         />
                     </View>
                     <View style={[styles.inputContainer, {width: "50%", height: "50%"}]}>
                         <TextInput 
                             style={styles.input}
-                            placeholder={"DNI"}
+                            placeholder={"Apellido"}
                             keyboardType={"default"}
+                            value={lastName}
                         />
                     </View>
                 </View>
@@ -46,6 +51,7 @@ const ValidateProfile = () => {
                             style={styles.input}
                             placeholder={"Email"}
                             keyboardType={"default"}
+                            value={email}
                         />
                     </View>
                 </View>
@@ -73,11 +79,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 8,
 
-        paddingHorizontal: 10,
-        marginVertical: 5
+        paddingHorizontal: '5%',
+        marginVertical: '1%'
     },
     input : {
-        padding: 5,
+        padding: '1%',
         fontSize: 15,
     }
 });

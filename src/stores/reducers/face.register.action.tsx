@@ -21,13 +21,13 @@ const faceRegisterReducer = (
       case "NEXT_PHOTO":
         const nextIndex = state.photos.length + 1
         if (nextIndex === PHOTOS_TO_TAKE) {
-          console.log(...state.photos, action.value)
           return { ...state, processComplete: true, photos: [...state.photos, action.value] }
         }
         else {
-          console.log(...state.photos, action.value)
           return { ...state, processComplete: false, photos: [...state.photos, action.value] }
         }
+      case "RELOAD":
+        return initialState
       default:
         return state;
     }

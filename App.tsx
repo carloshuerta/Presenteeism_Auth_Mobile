@@ -8,8 +8,10 @@ import { View, Text } from 'react-native'
 import { Provider } from 'react-redux';
 import * as Font from 'expo-font';
 import Register from './src/pages/Register/Register'
-import ValidateProfile from './src/pages/Check/ValidateProfile'
+import ValidateProfile from './src/pages/Register/ValidateProfile'
 import FaceRegister from './src/pages/Register/FaceRegister'
+import Zone from './src/pages/Check/Zone'
+import StatusHandler from './src/pages/Status/StatusHandler'
  
 const Stack = createStackNavigator()
 
@@ -53,6 +55,7 @@ const AppWrap = () => {
             }
           }}
         />
+      
         <Stack.Screen
           name="FaceRegister"
           component={FaceRegister}
@@ -70,6 +73,34 @@ const AppWrap = () => {
         <Stack.Screen 
           name="Detection" 
           component={Detection} 
+          options={{
+            title: "",
+            headerStyle: {
+              backgroundColor: "#E1E1E1",
+              shadowColor: "transparent"
+            },
+            cardStyle: {
+              backgroundColor: "#E1E1E1",             
+            }
+          }}
+        />
+        <Stack.Screen 
+          name="Zone" 
+          component={Zone} 
+          options={{
+            title: "",
+            headerStyle: {
+              backgroundColor: "#E1E1E1",
+              shadowColor: "transparent"
+            },
+            cardStyle: {
+              backgroundColor: "#E1E1E1",             
+            }
+          }}
+        />
+        <Stack.Screen 
+          name="StatusHandler" 
+          component={StatusHandler} 
           options={{
             title: "",
             headerStyle: {

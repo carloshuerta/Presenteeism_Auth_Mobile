@@ -1,24 +1,27 @@
-import { View, Text, StyleSheet, Button, Pressable } from 'react-native'
+import { View, Text, StyleSheet, Button, Pressable, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { Camera, CameraCapturedPicture, CameraType, FaceDetectionResult } from 'expo-camera'
 import { connect } from 'react-redux'
 import { PHOTOS_TO_TAKE, promptsFaceRegisterText, RegisterFaceAction, RegisterFaceActions } from '../../stores/constants/face.register.action'
 import { updateFaceRegister } from '../../stores/actions/face.register.action'
 import { useNavigation } from '@react-navigation/native'
+import { fromData, post } from '../../utils/http'
 
-const FaceRegister = ({registerFaceState, dispatchFaceRegister}) => {
+const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
 
   const navigation = useNavigation()
+  const id = route.params;
 
   const [hasPermission, setHasPermission] = useState(false)
   const [camera, setCamera] = useState(null);
 
   const takePicture = async () => {
-    if (camera) {
+    if (camera && registerFaceState.faceDetected && registerFaceState.photos.length != PHOTOS_TO_TAKE) {
       const data : CameraCapturedPicture = await camera.takePictureAsync(null);
       dispatchFaceRegister({type: "NEXT_PHOTO", value: data})
     }
   };
+  
 
   const onFacesDetected = (result: FaceDetectionResult) => {
     if (result.faces.length !== 1) {
@@ -29,6 +32,8 @@ const FaceRegister = ({registerFaceState, dispatchFaceRegister}) => {
   }
 
   useEffect(() => {
+    dispatchFaceRegister({ type: "RELOAD" })
+
     const requestPermissions = async () => {
         const { status } = await Camera.requestCameraPermissionsAsync()
         setHasPermission(status === "granted")
@@ -38,8 +43,24 @@ const FaceRegister = ({registerFaceState, dispatchFaceRegister}) => {
   }, [])
 
   useEffect(() => {
-    if(registerFaceState.photos.length >= PHOTOS_TO_TAKE){
-      console.log(registerFaceState.photos)
+    if(registerFaceState.photos.length == PHOTOS_TO_TAKE){
+      let formData = new FormData();
+      formData.append('userId', id)
+      
+      for (let index = 0; index != 3; index++) {
+        const image = registerFaceState.photos[index];      
+        let file = {
+          uri : image.uri,
+          type: 'image/jpg', 
+          name: image.uri
+        } 
+        formData.append('files', file)
+      }
+
+      fromData(`/cognitive/add`, formData).then(response => {
+        dispatchFaceRegister({ type: "RELOAD" })
+        navigation.navigate("Home")
+      }).catch(error => Alert.alert("Error", "Error al registrar su cara. Contacte con Recursos Humanos."))
     }
   }, [registerFaceState.photos])
 
