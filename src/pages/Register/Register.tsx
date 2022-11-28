@@ -18,7 +18,6 @@ const Register = () => {
 
   const validateProfile = () => {
     get(`/employee/employee-validation?validationCode=${value}`).then(response => {
-      console.log(response.data)
         navigation.navigate("ValidateProfile", response.data)
       }).catch(error => Alert.alert("Error!", "Código de validacion no válido, contacte con Recursos Humanos."))
   }

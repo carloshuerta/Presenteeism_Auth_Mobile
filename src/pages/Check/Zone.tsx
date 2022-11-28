@@ -3,9 +3,11 @@ import { useNavigation } from "@react-navigation/native"
 import { useEffect, useState } from "react";
 
 import * as Location from 'expo-location';
+import { fromData, post } from "../../utils/http";
 
-const Zone = () => {
+const Zone = ({route}) => {
   const navigation = useNavigation()
+  const {employeeId, image} = route.params;
   
   const [location, setLocation] = useState(null);
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
@@ -42,8 +44,22 @@ const Zone = () => {
   }, []);
 
   const validateZone = () => {
-      // validar zona
-      navigation.navigate("StatusHandler", {statusGood: true}) // mandar true o false
+      post(`/employee/validate-zone/${employeeId}`, {
+        latitude: location.latitude,
+        longitude: location.longitude
+      }).then(_ => {
+        let fdata = new FormData();
+        fdata.append('employeeId', employeeId);
+        fdata.append('adress', displayCurrentAddress);
+        fdata.append('latitude', location.latitude);
+        fdata.append('longitude', location.longitude);
+        fdata.append('image', image);
+
+        fromData(`/activity`, fdata).then(response => {
+          navigation.navigate("StatusHandler", {statusGood: true})
+        }).catch(error => Alert.alert("Error", "Error inesperado"))
+      })
+      .catch(error => Alert.alert('Error', 'No te encuentras en tu zona establecida'))
   }
 
   return (

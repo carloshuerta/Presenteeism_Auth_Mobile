@@ -10,7 +10,6 @@ export const post = (url, body = null) => {
 }
 
 export const fromData = (url, fromData) => {
-    console.log(fromData)
     return axios.post(`${environment.API_URL}${url}`, fromData, { 
         headers: {
           'Content-Type': 'multipart/form-data',

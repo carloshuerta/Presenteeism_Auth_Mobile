@@ -18,7 +18,7 @@ const StatusHandler = ({route}) => {
         </View>
         <View style={{flex: 1}}>
             <Text style={{fontSize: 30,textAlign: "center", fontWeight: 'bold'}}>¡Perfecto!</Text>
-            <Text style={{fontSize: 20,textAlign: "center", marginTop: 10}}>Realizaste el proceso correctamente. Lorem ipsum lorem latin</Text>
+            <Text style={{fontSize: 20,textAlign: "center", marginTop: 10}}>Realizaste el proceso correctamente.</Text>
         </View>
         <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
           <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={backHome}>

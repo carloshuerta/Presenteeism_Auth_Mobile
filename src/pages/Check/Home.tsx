@@ -26,7 +26,7 @@ const Home = () => {
             Sigue los pasos
           </Text>
           <Text style={{textAlign: "center", fontSize: 15, marginTop: 15, width: "75%"}}>
-            Debemos validar tu informacion para confirmar que seas el empleado autentico y lorem ipsum
+            Debemos validar tu información para confirmar que seas el empleado auténtico.
           </Text>
         </View>
         <View style={{ flex: 3, alignItems: "center" }}>
