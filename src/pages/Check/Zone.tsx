@@ -1,13 +1,66 @@
-import { View, StyleSheet, Image, Pressable, Text } from "react-native";
+import { View, StyleSheet, Image, Pressable, Text, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native"
+import { useEffect, useState } from "react";
 
-const Zone = () => {
-    const navigation = useNavigation()
-    
-    const validateZone = () => {
-        // validar zona
-        navigation.navigate("StatusHandler", {statusGood: true}) // mandar true o false
-    }
+import * as Location from 'expo-location';
+import { fromData, post } from "../../utils/http";
+
+const Zone = ({route}) => {
+  const navigation = useNavigation()
+  const {employeeId, image} = route.params;
+  
+  const [location, setLocation] = useState(null);
+  const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
+    'Buscando localización...'
+  );
+
+  useEffect(() => {
+    (async () => {
+      
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        Alert.alert("Error",'Los permisos para acceder a la ubicación fueron denegadas');
+        return;
+      }
+
+      let { coords } = await Location.getCurrentPositionAsync({});
+      setLocation(coords);
+      if (coords) {
+        const { latitude, longitude } = coords;
+
+        let response = await Location.reverseGeocodeAsync({
+          latitude,
+          longitude
+        });
+
+        for (let item of response) {
+          let address = `${item.street} ${item.name}, ${item.city}, ${item.country}`;
+          address.replace('null', '')
+
+          setDisplayCurrentAddress(address);
+        }
+      }
+    })();
+  }, []);
+
+  const validateZone = () => {
+      post(`/employee/validate-zone/${employeeId}`, {
+        latitude: location.latitude,
+        longitude: location.longitude
+      }).then(_ => {
+        let fdata = new FormData();
+        fdata.append('employeeId', employeeId);
+        fdata.append('adress', displayCurrentAddress);
+        fdata.append('latitude', location.latitude);
+        fdata.append('longitude', location.longitude);
+        fdata.append('image', image);
+
+        fromData(`/activity`, fdata).then(response => {
+          navigation.navigate("StatusHandler", {statusGood: true})
+        }).catch(error => Alert.alert("Error", "Error inesperado"))
+      })
+      .catch(error => Alert.alert('Error', 'No te encuentras en tu zona establecida'))
+  }
 
   return (
     <View style={styles.container}> 
@@ -17,7 +70,7 @@ const Zone = () => {
         </View>
         <View style={{flex: 1}}>
             <Text style={{fontSize: 20,textAlign: "center"}}>Actualmente te encuentras en:</Text>
-            <Text style={{fontSize: 25,textAlign: "center", fontWeight: 'bold'}}>Lima 775 - CABA</Text>
+            <Text style={{fontSize: 22,textAlign: "center", fontWeight: 'bold'}}>{displayCurrentAddress}</Text>
         </View>
         <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
           <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={validateZone}>

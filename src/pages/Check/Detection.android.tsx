@@ -1,7 +1,7 @@
 import * as FaceDetector from "expo-face-detector"
 import React, { useEffect, useState } from "react"
-import { StyleSheet, Text, View, Dimensions } from "react-native"
-import { Camera, CameraType, FaceDetectionResult } from "expo-camera"
+import { StyleSheet, Text, View, Dimensions, Alert } from "react-native"
+import { Camera, CameraCapturedPicture, CameraType, FaceDetectionResult } from "expo-camera"
 import { AnimatedCircularProgress } from "react-native-circular-progress"
 import { useNavigation } from "@react-navigation/native"
 import FaceDetection from "../../interfaces/FaceDetection.inteface"
@@ -9,12 +9,14 @@ import CameraPreviewMask from "../../components/icons/CameraPreviewMask.icon"
 import { Action, Actions, detections, promptsText } from "../../stores/constants/detection.constants"
 import { updateDetection } from "../../stores/actions/detection.actions"
 import { connect } from 'react-redux';
+import { fromData } from "../../utils/http"
 
 const { width: windowWidth } = Dimensions.get("window")
 
 const Detection = ({detectionState, dispatchDetection}) => {
   const navigation = useNavigation()
   const [hasPermission, setHasPermission] = useState(false)
+  const [camera, setCamera] = useState(null);
 
   useEffect(() => {
     const requestPermissions = async () => {
@@ -26,15 +28,30 @@ const Detection = ({detectionState, dispatchDetection}) => {
   }, [])
 
   useEffect(() => {
-    if (detectionState.processComplete) {
-      setTimeout(() => {
-        // Sacar foto y validar 
+    const humanValidation = async () => {
+      if (detectionState.processComplete && camera) {
+        const image : CameraCapturedPicture = await camera.takePictureAsync(null);
+  
+        let formData = new FormData();
 
-        dispatchDetection({ type: "FACE_DETECTED", value: "no" })
+        let file = {
+          uri : image.uri,
+          type: 'image/jpg', 
+          name: image.uri
+        } as unknown as Blob
 
-        navigation.navigate("Zone")
-      }, 750)
+        formData.append('file', file)
+
+        fromData(`/cognitive/identify`, formData)
+        .then(response => {
+          dispatchDetection({ type: "FACE_DETECTED", value: "no" })
+          navigation.navigate("Zone", {employeeId : response.data, image: file})  
+        })
+        .catch(error => Alert.alert("Error", "La cara no coincide."))
+      }    
     }
+
+    humanValidation();
   }, [detectionState.processComplete])
 
   const onFacesDetected = (result: FaceDetectionResult) => {
@@ -146,6 +163,7 @@ const Detection = ({detectionState, dispatchDetection}) => {
       />
       <Camera
         style={styles.cameraPreview}
+        ref={(ref) => setCamera(ref)}
         type={CameraType.front}
         onFacesDetected={onFacesDetected}
         faceDetectorSettings={{

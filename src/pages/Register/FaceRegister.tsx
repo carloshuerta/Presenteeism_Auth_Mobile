@@ -5,7 +5,7 @@ import { connect } from 'react-redux'
 import { PHOTOS_TO_TAKE, promptsFaceRegisterText, RegisterFaceAction, RegisterFaceActions } from '../../stores/constants/face.register.action'
 import { updateFaceRegister } from '../../stores/actions/face.register.action'
 import { useNavigation } from '@react-navigation/native'
-import { fromData, post } from '../../utils/http'
+import { fromData } from '../../utils/http'
 
 const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
 
@@ -53,11 +53,12 @@ const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
           uri : image.uri,
           type: 'image/jpg', 
           name: image.uri
-        } 
+        } as unknown as Blob
+
         formData.append('files', file)
       }
 
-      fromData(`/cognitive/add`, formData).then(response => {
+      fromData(`/employee/registration/upload`, formData).then(response => {
         dispatchFaceRegister({ type: "RELOAD" })
         navigation.navigate("Home")
       }).catch(error => Alert.alert("Error", "Error al registrar su cara. Contacte con Recursos Humanos."))
