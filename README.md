@@ -6,6 +6,6 @@
 
 # Documentación
 
- - [Primer Entregable (UX Research)](https://drive.google.com/file/d/1oYWT-AM7fIYHJUsVepivAubyBq9XcznZ/view?usp=sharing)
+ - [Primer Entregable (UX Research)](https://drive.google.com/file/d/193oBbVEuamyRHb4TuhcwUmCCzc1QKBhK/view?usp=sharing)
 
 
