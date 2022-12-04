@@ -6,6 +6,7 @@ import { PHOTOS_TO_TAKE, promptsFaceRegisterText, RegisterFaceAction, RegisterFa
 import { updateFaceRegister } from '../../stores/actions/face.register.action'
 import { useNavigation } from '@react-navigation/native'
 import { fromData } from '../../utils/http'
+import Loading from '../../components/app/Loading'
 
 const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
 
@@ -14,6 +15,8 @@ const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
 
   const [hasPermission, setHasPermission] = useState(false)
   const [camera, setCamera] = useState(null);
+
+  const [loading, isLoading] = useState(false);
 
   const takePicture = async () => {
     if (camera && registerFaceState.faceDetected && registerFaceState.photos.length != PHOTOS_TO_TAKE) {
@@ -44,6 +47,8 @@ const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
 
   useEffect(() => {
     if(registerFaceState.photos.length == PHOTOS_TO_TAKE){
+      isLoading(true);
+
       let formData = new FormData();
       formData.append('userId', id)
       
@@ -62,6 +67,7 @@ const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
         dispatchFaceRegister({ type: "RELOAD" })
         navigation.navigate("Home")
       }).catch(error => Alert.alert("Error", "Error al registrar su cara. Contacte con Recursos Humanos."))
+      .finally(() => isLoading(false))
     }
   }, [registerFaceState.photos])
 
@@ -70,40 +76,43 @@ const FaceRegister = ({route, registerFaceState, dispatchFaceRegister}) => {
   }
 
   return (
-    <View style={[styles.container, {
-      flexDirection: "column"
-    }]}>        
-      <View style={[styles.cameraContainer, { flex: 3, alignItems: "center" }]}>         
-        <Camera
-          ref={(ref) => setCamera(ref)}
-          onFacesDetected={onFacesDetected}
-          style={styles.fixedRatio}
-          type={CameraType.front}
-          ratio={'1:1'}
-        />
-      </View>
-      <View style={{flex: 1, marginTop: '5%'}}>
-        <Text style={styles.faceStatus}>
-          {!registerFaceState.faceDetected && promptsFaceRegisterText.noFaceDetected}
-        </Text>
-        <Text style={styles.actionPrompt}>
-          {registerFaceState.faceDetected && promptsFaceRegisterText.performActions}
-        </Text>
-        <Text style={styles.actionPrompt}>
-        {registerFaceState.faceDetected && `${registerFaceState.photos.length}/${PHOTOS_TO_TAKE}`}
-        </Text>
-      </View>
-      <View style={[styles.view, { flex: 2 }]}>
-        <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={takePicture}>
-          <Text style={{color: "white", textAlign: "center", fontSize: 20}}>Tomar foto</Text>
-        </Pressable>
-        <Pressable>
-          <Text style={{marginTop: 10, textDecorationLine: "underline"}}>
-            Tengo un problema
+    <>
+      <View style={[styles.container, {
+        flexDirection: "column"
+      }]}>        
+        <View style={[styles.cameraContainer, { flex: 3, alignItems: "center" }]}>         
+          <Camera
+            ref={(ref) => setCamera(ref)}
+            onFacesDetected={onFacesDetected}
+            style={styles.fixedRatio}
+            type={CameraType.front}
+            ratio={'1:1'}
+          />
+        </View>
+        <View style={{flex: 1, marginTop: '5%'}}>
+          <Text style={styles.faceStatus}>
+            {!registerFaceState.faceDetected && promptsFaceRegisterText.noFaceDetected}
           </Text>
-        </Pressable>        
+          <Text style={styles.actionPrompt}>
+            {registerFaceState.faceDetected && promptsFaceRegisterText.performActions}
+          </Text>
+          <Text style={styles.actionPrompt}>
+          {registerFaceState.faceDetected && `${registerFaceState.photos.length}/${PHOTOS_TO_TAKE}`}
+          </Text>
+        </View>
+        <View style={[styles.view, { flex: 2 }]}>
+          <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={takePicture}>
+            <Text style={{color: "white", textAlign: "center", fontSize: 20}}>Tomar foto</Text>
+          </Pressable>
+          <Pressable>
+            <Text style={{marginTop: 10, textDecorationLine: "underline"}}>
+              Tengo un problema
+            </Text>
+          </Pressable>        
+        </View>
       </View>
-    </View>
+      {loading ? <Loading/> : <></>}
+    </>
   )
 }
 

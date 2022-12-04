@@ -10,6 +10,7 @@ import { Action, Actions, detections, promptsText } from "../../stores/constants
 import { updateDetection } from "../../stores/actions/detection.actions"
 import { connect } from 'react-redux';
 import { fromData } from "../../utils/http"
+import Loading from "../../components/app/Loading"
 
 const { width: windowWidth } = Dimensions.get("window")
 
@@ -17,6 +18,8 @@ const Detection = ({detectionState, dispatchDetection}) => {
   const navigation = useNavigation()
   const [hasPermission, setHasPermission] = useState(false)
   const [camera, setCamera] = useState(null);
+
+  const [loading, isLoading] = useState(false);
 
   useEffect(() => {
     const requestPermissions = async () => {
@@ -30,8 +33,9 @@ const Detection = ({detectionState, dispatchDetection}) => {
   useEffect(() => {
     const humanValidation = async () => {
       if (detectionState.processComplete && camera) {
-        const image : CameraCapturedPicture = await camera.takePictureAsync(null);
-  
+        const image : CameraCapturedPicture = await camera.takePictureAsync(null); 
+        isLoading(true);
+
         let formData = new FormData();
 
         let file = {
@@ -48,6 +52,7 @@ const Detection = ({detectionState, dispatchDetection}) => {
           navigation.navigate("Zone", {employeeId : response.data, image: file})  
         })
         .catch(error => Alert.alert("Error", "La cara no coincide."))
+        .finally(() => isLoading(false))
       }    
     }
 
@@ -199,6 +204,7 @@ const Detection = ({detectionState, dispatchDetection}) => {
         </Text>
       </View>
     </View>
+    {loading ? <Loading/> : <></>}
     </>
   )
 }

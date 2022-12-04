@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import * as Location from 'expo-location';
 import { fromData, post } from "../../utils/http";
+import Loading from "../../components/app/Loading";
 
 const Zone = ({route}) => {
   const navigation = useNavigation()
@@ -13,6 +14,8 @@ const Zone = ({route}) => {
   const [displayCurrentAddress, setDisplayCurrentAddress] = useState(
     'Buscando localización...'
   );
+
+  const [loading, isLoading] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -44,6 +47,7 @@ const Zone = ({route}) => {
   }, []);
 
   const validateZone = () => {
+      isLoading(true);
       post(`/employee/validate-zone/${employeeId}`, {
         latitude: location.latitude,
         longitude: location.longitude
@@ -60,29 +64,33 @@ const Zone = ({route}) => {
         }).catch(error => Alert.alert("Error", "Error inesperado"))
       })
       .catch(error => Alert.alert('Error', 'No te encuentras en tu zona establecida'))
+      .finally(() => isLoading(false))
   }
 
   return (
-    <View style={styles.container}> 
-        <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
-            <Image source={require('../../../assets/images/mock_direction.png')} 
-            style={{width: '90%', height: '90%', borderRadius: 15, borderColor: '#7D7D7D', borderWidth: 1}}/>
-        </View>
-        <View style={{flex: 1}}>
-            <Text style={{fontSize: 20,textAlign: "center"}}>Actualmente te encuentras en:</Text>
-            <Text style={{fontSize: 22,textAlign: "center", fontWeight: 'bold'}}>{displayCurrentAddress}</Text>
-        </View>
-        <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
-          <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={validateZone}>
-            <Text style={{color: "white", textAlign: "center", fontSize: 20}}>Validar</Text>
-          </Pressable>
-          <Pressable>
-            <Text style={{marginTop: 10, textDecorationLine: "underline"}}>
-              Tengo un problema
-            </Text>
-          </Pressable>        
-        </View>
-    </View>
+    <>
+      <View style={styles.container}> 
+          <View style={{flex: 6, justifyContent: 'center', alignItems: 'center'}}>
+              <Image source={require('../../../assets/images/mock_direction.png')} 
+              style={{width: '90%', height: '90%', borderRadius: 15, borderColor: '#7D7D7D', borderWidth: 1}}/>
+          </View>
+          <View style={{flex: 1}}>
+              <Text style={{fontSize: 20,textAlign: "center"}}>Actualmente te encuentras en:</Text>
+              <Text style={{fontSize: 22,textAlign: "center", fontWeight: 'bold'}}>{displayCurrentAddress}</Text>
+          </View>
+          <View style={{ flex: 2, justifyContent: "center", alignItems: "center" }}>
+            <Pressable style={{width: "80%", backgroundColor: "#5570F1", padding: 15, borderRadius: 45}} onPress={validateZone}>
+              <Text style={{color: "white", textAlign: "center", fontSize: 20}}>Validar</Text>
+            </Pressable>
+            <Pressable>
+              <Text style={{marginTop: 10, textDecorationLine: "underline"}}>
+                Tengo un problema
+              </Text>
+            </Pressable>        
+          </View>
+      </View>
+      {loading ? <Loading/> : <></>}
+    </>
   )
 }
 
